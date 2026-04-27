@@ -485,3 +485,7 @@ legal advice. Review with a qualified legal professional before use. ClauseGuard
 3. At least one unit test covers the core logic
 4. Error states handled: network fail, API fail, empty state
 5. Responsive: mobile 375px+ and desktop 1280px+
+
+- read @PRD.md
+
+- read @PLAN.md
