@@ -5,15 +5,15 @@ import { DocTypeGrid } from '@/components/create/DocTypeGrid';
 import { type Track } from '@/types/document';
 
 interface TrackPageProps {
-  params: {
+  params: Promise<{
     track: string;
-  };
+  }>;
 }
 
 const VALID_TRACKS = ['freelancer', 'startup', 'creator'];
 
-export default function TrackPage({ params }: TrackPageProps) {
-  const { track } = params;
+export default async function TrackPage({ params }: TrackPageProps) {
+  const { track } = await params;
 
   if (!VALID_TRACKS.includes(track)) {
     redirect('/create');

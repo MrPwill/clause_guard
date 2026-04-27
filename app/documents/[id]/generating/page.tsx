@@ -12,7 +12,7 @@ import { Loader2, CheckCircle2, AlertCircle, Shield } from 'lucide-react';
 export default function GeneratingPage() {
   const router = useRouter();
   const params = useParams();
-  const documentId = params.id as string;
+  const [documentId, setDocumentId] = useState<string | null>(null);
   const { docType, jurisdiction, answers } = useWizardStore();
   
   const [content, setContent] = useState('');
@@ -86,11 +86,22 @@ export default function GeneratingPage() {
   };
 
   useEffect(() => {
-    if (!hasStarted.current) {
-      hasStarted.current = true;
+    async function init() {
+      if (!hasStarted.current) {
+        hasStarted.current = true;
+        const { id } = await params;
+        const resolvedId = Array.isArray(id) ? id[0] : id;
+        setDocumentId(resolvedId ? resolvedId : null);
+      }
+    }
+    init();
+  }, [params]);
+
+  useEffect(() => {
+    if (documentId && status === 'loading') {
       startGeneration();
     }
-  }, []);
+  }, [documentId, status]);
 
   return (
     <div className="container max-w-3xl py-12">
