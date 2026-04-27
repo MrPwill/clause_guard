@@ -1,0 +1,99 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
+export default function SignupPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    setLoading(true);
+
+    const supabase = createClient();
+    const { error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (authError) {
+      setError(authError.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push('/dashboard');
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-brand-gray px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="space-y-1 text-center">
+          <CardTitle className="text-2xl font-bold text-brand-dark">
+            ClauseGuard
+          </CardTitle>
+          <CardDescription>Protect your work. Get paid.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="rounded-md bg-red-50 p-3 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Must be at least 8 characters
+              </p>
+            </div>
+            <Button type="submit" className="w-full bg-brand-blue" disabled={loading}>
+              {loading ? 'Creating account...' : 'Create account'}
+            </Button>
+          </form>
+          <p className="mt-4 text-center text-sm text-muted-foreground">
+            Already have an account?{' '}
+            <Link href="/login" className="text-brand-blue hover:underline">
+              Sign in
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
