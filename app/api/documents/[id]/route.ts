@@ -104,13 +104,18 @@ export async function PATCH(
     }
 
     const body = await request.json();
+    const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
+
+    if (body.answers !== undefined) updates.answers = body.answers;
+    if (body.status !== undefined) updates.status = body.status;
+    if (body.content !== undefined) updates.content = body.content;
+    if (body.pdfUrl !== undefined) updates.pdf_url = body.pdfUrl;
+    if (body.signature !== undefined) updates.signature = body.signature;
+    if (body.signedAt !== undefined) updates.signed_at = body.signedAt;
     
     const { data, error } = await supabase
       .from('documents')
-      .update({
-        answers: body.answers,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updates)
       .eq('id', id)
       .eq('user_id', user.id)
       .select()
@@ -119,8 +124,38 @@ export async function PATCH(
     if (error) throw error;
 
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating document:', error);
-    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+    const message = error instanceof Error ? error.message : 'Internal Server Error';
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { error } = await supabase
+      .from('documents')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', user.id);
+
+    if (error) throw error;
+
+    return NextResponse.json({ success: true });
+  } catch (error: unknown) {
+    console.error('Error deleting document:', error);
+    const message = error instanceof Error ? error.message : 'Internal Server Error';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
