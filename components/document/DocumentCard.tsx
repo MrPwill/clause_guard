@@ -1,28 +1,17 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { cn, formatDate } from '@/lib/utils';
-import type { Document } from '@/types/document';
+import type { Database } from '@/types/supabase';
+import type { Track, Jurisdiction } from '@/types/document';
 import { TrackBadge } from '@/components/shared/TrackBadge';
 import { JurisdictionBadge } from '@/components/shared/JurisdictionBadge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { createClient } from '@/lib/supabase/client';
 import { Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface DocumentCardProps {
-  document: Document;
+  document: Database['public']['Tables']['documents']['Row'];
   className?: string;
   onDeleted?: () => void;
 }
@@ -43,7 +32,7 @@ export function DocumentCard({ document, className, onDeleted }: DocumentCardPro
   const [isDeleting, setIsDeleting] = useState(false);
   const supabase = createClient();
 
-  const formattedDocType = document.docType.replace(/-/g, ' ');
+  const formattedDocType = document.doc_type?.replace(/-/g, ' ') ?? '';
 
   async function handleDelete() {
     setIsDeleting(true);
@@ -76,53 +65,31 @@ export function DocumentCard({ document, className, onDeleted }: DocumentCardPro
           <CardContent className="p-4">
             <div className="flex items-start justify-between gap-3 mb-3">
               <h3 className="font-semibold text-brand-dark line-clamp-1">{document.title}</h3>
-              <span className={cn('shrink-0 px-2 py-0.5 rounded text-xs font-medium', statusColors[document.status])}>
-                {statusLabels[document.status]}
+              <span className={cn('shrink-0 px-2 py-0.5 rounded text-xs font-medium', statusColors[document.status as keyof typeof statusColors])}>
+                {statusLabels[document.status as keyof typeof statusLabels]}
               </span>
             </div>
             
             <div className="flex flex-wrap items-center gap-2 text-sm">
-              <TrackBadge track={document.track} />
-              <JurisdictionBadge jurisdiction={document.jurisdiction} />
+              <TrackBadge track={document.track as Track} />
+              <JurisdictionBadge jurisdiction={document.jurisdiction as Jurisdiction} />
             </div>
             
             <p className="text-xs text-gray-500 mt-2 capitalize">{formattedDocType}</p>
-            <p className="text-xs text-gray-400 mt-1">Created {formatDate(document.createdAt)}</p>
+            <p className="text-xs text-gray-400 mt-1">Created {formatDate(document.created_at)}</p>
           </CardContent>
         </Card>
       </Link>
 
       {onDeleted && (
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <Button
-                size="icon"
-                variant="ghost"
-                className="h-8 w-8 text-gray-400 hover:text-red-500 hover:bg-red-50"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete document?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. "{document.title}" will be permanently deleted.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                  className="bg-red-500 hover:bg-red-600"
-                >
-                  {isDeleting ? 'Deleting...' : 'Delete'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <span
+            role="button"
+            onClick={handleDelete}
+            className="h-8 w-8 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md inline-flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <Trash2 className="h-4 w-4" />
+          </span>
         </div>
       )}
     </div>

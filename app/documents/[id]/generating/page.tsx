@@ -139,7 +139,7 @@ export default function GeneratingPage() {
             </Alert>
           ) : (
             <div className="relative">
-              <div className="bg-brand-gray/50 rounded-lg p-6 min-h-[300px] max-h-[500px] overflow-y-auto font-mono text-sm whitespace-pre-wrap border border-brand-gray">
+              <div className="bg-brand-gray/50 rounded-lg p-6 min-h-75 max-h-125 overflow-y-auto font-mono text-sm whitespace-pre-wrap border border-brand-gray">
                 {content || (
                   <div className="flex flex-col items-center justify-center h-full space-y-4 text-muted-foreground">
                     <Loader2 className="w-8 h-8 animate-spin text-brand-blue" />
@@ -153,7 +153,7 @@ export default function GeneratingPage() {
                   </div>
                 )}
               </div>
-              <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-brand-gray/50 to-transparent pointer-events-none rounded-b-lg" />
+              <div className="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-brand-gray/50 to-transparent pointer-events-none rounded-b-lg" />
             </div>
           )}
 

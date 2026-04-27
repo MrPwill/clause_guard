@@ -1,7 +1,7 @@
-create extension if not exists "uuid-ossp";
+create extension if not exists "uuid-ossp" schema pg_extensions;
 
 create table public.documents (
-  id           uuid primary key default uuid_generate_v4(),
+  id           uuid primary key default gen_random_uuid(),
   user_id      uuid references auth.users(id) on delete cascade not null,
   title        text not null,
   track        text not null check (track in ('freelancer', 'startup', 'creator')),

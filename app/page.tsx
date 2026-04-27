@@ -32,7 +32,7 @@ export default function Home() {
       <header className="border-b border-brand-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-blue to-brand-green flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-linear-to-br from-brand-blue to-brand-green flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold text-brand-dark">ClauseGuard</span>
@@ -54,7 +54,7 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        <section className="py-20 px-4 sm:px-6 lg:px-8 text-center bg-gradient-to-b from-brand-gray/50 to-white">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 text-center bg-linear-to-b from-brand-gray/50 to-white">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl sm:text-5xl font-bold text-brand-dark mb-4">
               Protect your work. Get paid.

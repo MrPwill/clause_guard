@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { DocumentCard } from '@/components/document/DocumentCard';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { toast } from 'sonner';
-import type { Document } from '@/types/document';
+import type { Database } from '@/types/supabase';
 
 const STATUS_TABS = [
   { value: 'all', label: 'All', color: '' },
@@ -26,7 +26,7 @@ const TRACK_FILTERS = [
 export function DashboardContent() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [trackFilter, setTrackFilter] = useState('all');
-  const [documents, setDocuments] = useState<Document[]>([]);
+  const [documents, setDocuments] = useState<Database['public']['Tables']['documents']['Row'][]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
