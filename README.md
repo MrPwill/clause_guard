@@ -2,6 +2,8 @@
 
 Protect your work. Get paid.
 
+**[Live Demo](https://clause-guard-chi.vercel.app)**
+
 ## Overview
 
 ClauseGuard Africa is a specialized legal document generation platform designed to provide accessible, jurisdiction-aware legal protection for freelancers, startups, SMEs, and content creators across Africa. By leveraging artificial intelligence and localized legal knowledge, ClauseGuard enables users to generate professional, e-signable documents in minutes, bypassing the high costs and complexity often associated with legal services.
@@ -76,7 +78,7 @@ Documents are rendered from Markdown to professional PDF layouts server-side. Br
 1. Clone the repository:
    ```bash
    git clone https://github.com/MrPwill/clause-guard.git
-   cd clause_guard
+   cd clause-guard
    ```
 
 2. Install dependencies:
