@@ -75,7 +75,7 @@ Documents are rendered from Markdown to professional PDF layouts server-side. Br
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/clause-guard.git
+   git clone https://github.com/MrPwill/clause-guard.git
    cd clause_guard
    ```
 
